@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+    <script>
+        function validateForm() {
+            // Get input field values
+            var amount = document.querySelector('input[name="amount"]').value;
+            var name = document.querySelector('input[name="name"]').value;
+            var email = document.querySelector('input[name="email"]').value;
+            var cardNumber = document.querySelector('input[name="cardNumber"]').value;
+            var pin = document.querySelector('input[name="pin"]').value;
+
+            // Check if the amount is a valid number and not empty
+            if (isNaN(parseFloat(amount)) || amount === '') {
+                alert("Please enter a valid amount.");
+                return false;
+            }
+
+            // Check if the name contains only characters and is not empty
+            if (!/^[A-Za-z\s]+$/.test(name) || name === '') {
+                alert("Please enter a valid name.");
+                return false;
+            }
+
+            // Check if the email is not empty and has a valid email format
+            if (!isValidEmail(email) || email === '') {
+                alert("Please enter a valid email address.");
+                return false;
+            }
+
+            // Check if the card number is not empty and has a valid format
+            if (cardNumber === '' || !/^\d{4}-\d{4}-\d{4}-\d{4}$/.test(cardNumber)) {
+                alert("Please enter a valid card number.");
+                return false;
+            }
+
+            // Check if the pin is exactly 3 digits and not empty
+            if (pin === '' || !/^\d{3}$/.test(pin)) {
+                alert("Please enter a valid 3-digit pin number.");
+                return false;
+            }
+
+            // If all validations pass, send the email using Email.js
+            sendEmail();
+
+            // Prevent form submission
+            return false;
+        }
+
+        // Function to validate an email address
+        function isValidEmail(email) {
+            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            return emailPattern.test(email);
+        }
+        function sendMail() {
+            (function(){
+                emailjs.init("Pa0Yxam8mY_rXKMAN");
+            })();
+                  var params = {
+                    email: document.querySelector('input[name="email"]').value,
+                    name: document.querySelector('input[name="name"]').value,
+                    amount: document.querySelector('input[name="amount"]').value
+                 };
+                emailjs.send("service_3f3uzxi", "template_id9gd8f", params).then((res)=>{
+                    document.getElementById("name").value="";
+                    document.getElementById("email").value="";
+                    document.getElementById("amount").value="";
+                });
+         }
+    </script>
+</head>
+<body>
+<center>   
+    <form onsubmit="return validateForm();" action="javascript:void(0);" method="post">
+        <div style="margin:20px ;">
+            <br><br> Amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input name="amount" id="amount" class="pay-logo" type="text" value="$.00" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '$.00';}" required="">
+        </div>
+        <div>
+            Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input name="name" id="name" class="pay-logo" type="text" value="Enter the name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter the name';}" required="">
+            <br><br>
+            Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input name="email" id="email" class="pay-logo" type="email" value="example@example.com" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'example@example.com';}" required="">
+            <br><br>
+            Card number
+            <input name="cardNumber" class="pay-logo" type="text" value="0000-0000-0000-0000" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '0000-0000-0000-0000';}" required="">
+        </div>
+        <div>
+            <div>
+                <br><br><br>EXPIRATION
+                <table>
+                    <tr><td>
+                        Month &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="number" class="text_box" name="expirationMonth" value="0" min="1" />
+                    </td></tr>
+                    <tr><td>
+                        Year &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="number" class="text_box" name="expirationYear" value="0" min="2023"/>
+                    </td></tr>
+                </table>
+            </div>
+            <div class="tab-form-right user-form-rt">
+                <br><br> Pin number &nbsp;&nbsp;
+                <input name="pin" type="password" value="xxx" style="width: 220px;" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'xxx';}" required="">
+            </div>
+        </div>
+        <br><br>
+        <button type="submit" onclick="sendMail()" style="margin: 10px;" class="w3-button w3-white w3-border w3-border-red w3-round-large">Send</button>
+    </form>
+</center> 
+</body>
+</html>
